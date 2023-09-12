@@ -1,0 +1,51 @@
+.movie-card {
+  position: relative;
+  max-width: 9.375rem; //15.625rem
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; //0.75rem
+
+  img {
+    height: 15rem;
+    width: 10.375rem;
+  }
+
+  &__like-btn {
+    position: absolute;
+    top: 10px;
+    right: -10px;
+    width: 1.875rem;
+    height: 1.82569rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+
+    img {
+      width: inherit;
+      height: inherit;
+      object-fit: contain;
+    }
+  }
+
+  &__release-date {
+    color: var(--gray-400, #9ca3af);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  &__title {
+    color: var(--gray-900, #111827);
+    font-size: 1.125rem;
+  }
+
+  &__score-wrapper {
+    color: var(--gray-900, #111827);
+
+    font-weight: 700;
+
+    span {
+      font-weight: 500;
+    }
+  }
+}

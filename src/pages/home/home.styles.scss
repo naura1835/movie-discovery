@@ -1,0 +1,24 @@
+section {
+  padding: 0.94rem 0.94rem; //5.94rem
+  //   div {
+  //     display: flex;
+  //     justify-content: space-between;
+  //   }
+  h2 {
+    margin-bottom: 2.9rem;
+    display: inline-block;
+  }
+
+  a {
+    color: hsla(345, 83%, 41%, 1);
+    display: inline-flex;
+    float: right;
+  }
+
+  .featured-movies__section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.375rem, 1fr));
+    row-gap: 2.9rem;
+    column-gap: 0.5rem;
+  }
+}
