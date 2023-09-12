@@ -70,24 +70,10 @@
         height: 300px;
         overflow-y: scroll;
         scroll-behavior: smooth;
-
-        ul {
-          list-style-type: none;
-        }
-
-        &__item {
-          width: 100%;
-
-          &:not(:last-child) {
-            margin-bottom: 0.8rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--gray-300, #d1d5db);
-          }
-        }
       }
     }
 
-    li:last-child {
+    menu {
       grid-column: 3/4;
       display: flex;
       align-items: center;
@@ -99,6 +85,7 @@
     }
 
     .nav__hamburger-menu {
+      position: relative;
       border-radius: 100%;
       width: 2.25rem;
       height: 2.25rem;
@@ -114,6 +101,23 @@
         height: 2px;
         display: inline-block;
         background-color: white;
+      }
+    }
+
+    .favorites {
+      position: absolute;
+      right: 30px;
+      top: 15%;
+      background-color: #fff;
+      width: 60%;
+      height: 400px;
+      overflow-y: hidden;
+      scroll-behavior: smooth;
+      color: #be123c;
+
+      h3,
+      p {
+        color: #be123c;
       }
     }
   }

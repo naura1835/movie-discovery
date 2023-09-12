@@ -1,17 +1,22 @@
 /* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
+import { useState } from "react";
+
+import MovieList from "../movieList/movieList.components";
 
 import movieBoxLogo from "../../assets/Logo.svg";
 import playIcon from "../../assets/Play.svg";
 
 import "./header.styles.scss";
-import MovieListItem from "../movieListItem/movieListItem.components";
 
-const Header = ({
-  movie = { title: "", overview: "" },
-  handleSearch,
-  searchedMovies,
-}) => {
+const Header = (props) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const {
+    movie = { title: "", overview: "" },
+    handleSearch,
+    searchedMovies,
+    loading,
+    favoriteMovies,
+  } = props;
   const { backdrop_path, title, overview } = movie;
 
   return (
@@ -27,6 +32,7 @@ const Header = ({
             <img src={movieBoxLogo} alt="movie box logo" />
             <h1>MovieBox</h1>
           </li>
+
           <li className="search-bar">
             <div className="search-bar__input">
               <input
@@ -36,31 +42,39 @@ const Header = ({
                 onChange={handleSearch}
               />
             </div>
-            {searchedMovies.length !== 0 && (
+
+            {loading ? (
               <section className="search-bar__result">
-                <ul>
-                  {searchedMovies.map((movie) => (
-                    <Link
-                      className="search-bar__result__item"
-                      key={movie.id}
-                      to={`details/${movie.id}`}
-                    >
-                      <MovieListItem movie={movie} />
-                    </Link>
-                  ))}
-                </ul>
+                <p>eee</p>
               </section>
+            ) : (
+              searchedMovies.length !== 0 && (
+                <section className="search-bar__result">
+                  <MovieList arr={searchedMovies} />
+                </section>
+              )
             )}
           </li>
-          <li>
+
+          <li className="menu">
             <a href="#">Sign In</a>
-            <div className="nav__hamburger-menu">
+            <div
+              className="nav__hamburger-menu"
+              onClick={() => setIsOpen(!isOpen)}
+            >
               <span className="line"></span>
               <span className="line"></span>
             </div>
+            {isOpen && (
+              <section aria-labelledby="favorites" className="favorites">
+                <h2 id="favorites">Favorites</h2>
+                <MovieList arr={favoriteMovies} />
+              </section>
+            )}
           </li>
         </ul>
       </nav>
+
       <section
         aria-labelledby="movie-title"
         className="hero-section__description"

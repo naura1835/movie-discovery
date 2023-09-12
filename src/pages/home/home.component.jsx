@@ -11,6 +11,7 @@ const HomePage = () => {
   const [movies, setMovies] = useState([]);
   const [favoriteMovies, setFavouriteMovies] = useState([]);
   const [searchedMovies, setSearchedMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const faves = JSON.parse(localStorage.getItem("favourites"));
@@ -49,6 +50,8 @@ const HomePage = () => {
   const handleSearch = async (e) => {
     const { value } = e.target;
 
+    setIsLoading(true);
+
     const url = `https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=en-US&page=1`;
     const options = {
       method: "GET",
@@ -60,6 +63,8 @@ const HomePage = () => {
     const res = await fetch(url, options);
     const data = await res.json();
     const searchArrResult = data.results;
+
+    setIsLoading(false);
 
     return setSearchedMovies(searchArrResult);
   };
@@ -79,6 +84,8 @@ const HomePage = () => {
         movie={movies[0]}
         handleSearch={handleSearch}
         searchedMovies={searchedMovies}
+        loading={isLoading}
+        favoriteMovies={favoriteMovies}
       />
 
       <section aria-labelledby="featured movies">
