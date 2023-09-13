@@ -1,13 +1,18 @@
 ul {
   list-style-type: none;
+  // width: 100%;
+  // padding: 0 0.94rem;
 }
 
 .list__item {
-  width: 100% !important;
+  display: block;
+  width: 98%;
+  margin: 0 auto;
+  padding: 1rem;
 
   &:not(:last-child) {
     margin-bottom: 0.8rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--gray-300, #d1d5db);
+    border-bottom: 1px solid #d1d5db;
   }
 }

@@ -1,12 +1,28 @@
-section {
-  padding: 0.94rem 0.94rem; //5.94rem
-  //   div {
-  //     display: flex;
-  //     justify-content: space-between;
-  //   }
+@use "../../breakpoints.scss" as u;
+
+.featured-movies {
+  margin: 0.94rem 0.94rem; //5.94rem
+
+  @media (min-width: u.$tablet-portrait-up) {
+    margin: 3.94rem;
+  }
+
+  @media (min-width: u.$desktop-up) {
+    margin: 5.94rem;
+  }
+
   h2 {
+    font-size: 1.5rem;
     margin-bottom: 2.9rem;
     display: inline-block;
+
+    @media (min-width: u.$large-phones) {
+      font-size: 1.8rem;
+    }
+
+    @media (min-width: u.$tablet-landscape-up) {
+      font-size: 2.25rem;
+    }
   }
 
   a {
@@ -15,10 +31,14 @@ section {
     float: right;
   }
 
-  .featured-movies__section {
+  &__section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(9.375rem, 1fr));
     row-gap: 2.9rem;
     column-gap: 0.5rem;
+
+    @media (min-width: u.$tablet-portrait-up) {
+      column-gap: 4rem;
+    }
   }
 }

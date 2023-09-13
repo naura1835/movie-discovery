@@ -88,7 +88,7 @@ const HomePage = () => {
         favoriteMovies={favoriteMovies}
       />
 
-      <section aria-labelledby="featured movies">
+      <section aria-labelledby="featured movies" className="featured-movies">
         <div>
           <h2 id="featured-movies">Featured Movie</h2>
           <a>
@@ -99,27 +99,14 @@ const HomePage = () => {
           {movies
             .filter((movie, index) => index > 0 && index <= 10)
             .map((movie) => (
-              // <Link key={movie.id} to={`details/${movie.id}`}>
               <MovieCard
                 key={movie.id}
                 movie={movie}
                 addToFavourites={addToFavourites}
               />
-              // </Link>
             ))}
         </div>
       </section>
-      {/* <section>
-        <p>search results</p>
-        {searchedMovies.map((movie) => (
-          <>
-            <p>{movie.title}</p>
-            <button onClick={() => addToFavourites(movie.title)}>
-              Add To Favorites
-            </button>
-          </>
-        ))}
-      </section> */}
     </>
   );
 };
