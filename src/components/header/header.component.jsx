@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import MovieList from "../movieList/movieList.components";
 
@@ -10,6 +10,7 @@ import "./header.styles.scss";
 
 const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [youtubeKey, setYoutubeKey] = useState("");
   const {
     movie = { title: "", overview: "" },
     handleSearch,
@@ -17,7 +18,33 @@ const Header = (props) => {
     loading,
     favoriteMovies,
   } = props;
-  const { backdrop_path, title, overview } = movie;
+  const { backdrop_path, title, overview, id } = movie;
+
+  useEffect(() => {
+    //fecth youtube key for trailer video
+    const fetchVideo = async () => {
+      const url = `http://api.themoviedb.org/3/movie/${id}/videos?api_key=${
+        import.meta.env.VITE_API_KEY
+      }`;
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: import.meta.env.VITE_TOKEN,
+        },
+      };
+
+      const res = await fetch(url, options);
+      const data = await res.json();
+      const trailer = await data.results?.find(
+        (res) => res.name.toLowerCase() == "main trailer"
+      );
+
+      return setYoutubeKey(trailer.key);
+    };
+
+    fetchVideo();
+  }, [movie, id]);
 
   return (
     <header className="hero-section">
@@ -83,10 +110,7 @@ const Header = (props) => {
         <p>{overview}</p>
         <a
           className="watch-trailer"
-          href={`https://www.youtube.com/results?search_query=${title.replaceAll(
-            " ",
-            "+"
-          )}`}
+          href={`https://www.youtube.com/watch?v=${youtubeKey}`}
         >
           <img src={playIcon} alt="play icon" />
           Watch Trailer

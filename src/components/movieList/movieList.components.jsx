@@ -7,7 +7,7 @@ import "./movieList.styles.scss";
 const MovieList = (prop) => {
   const { arr } = prop;
   return (
-    <ul>
+    <ul className="movie-list">
       {arr.map((item) => (
         <Link className="list__item" key={item.id} to={`details/${item.id}`}>
           <MovieListItem movie={item} />

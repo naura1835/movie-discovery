@@ -1,0 +1,60 @@
+@use "../../breakpoints" as u;
+
+.side-bar {
+  max-width: 14.125rem;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0rem 2.8125rem 2.8125rem 0rem;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: #fff;
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem;
+  }
+
+  span {
+    display: none;
+
+    @media (min-width: u.$desktop-up) {
+      display: block;
+    }
+  }
+
+  &:hover {
+    flex: 1 14.125rem;
+  }
+
+  &:hover > ul li span,
+  &:hover > .logo span {
+    display: inline;
+  }
+
+  img {
+    height: 30px;
+    width: 30px;
+  }
+
+  [alt="moviebox logo"] {
+    height: 40px;
+    width: 40px;
+  }
+
+  &__item {
+    padding: 0 1rem;
+    height: 5.375rem;
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+
+    &:hover {
+      background-color: rgba(190, 18, 60, 0.1);
+    }
+
+    &:hover > span {
+      color: hsla(345, 83%, 41%, 1);
+    }
+  }
+}

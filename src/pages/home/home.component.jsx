@@ -47,6 +47,8 @@ const HomePage = () => {
     fetchMovies();
   }, []);
 
+  console.log(movies);
+
   const handleSearch = async (e) => {
     const { value } = e.target;
 
