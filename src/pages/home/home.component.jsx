@@ -34,7 +34,7 @@ const HomePage = () => {
     async function fetchMovies() {
       try {
         const url =
-          "https://api.themoviedb.org/3/trending/movie/day?language=en-US";
+          "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1";
         const options = {
           method: "GET",
           headers: {
