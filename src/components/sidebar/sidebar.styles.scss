@@ -8,6 +8,10 @@
   border: 1px solid rgba(0, 0, 0, 0.3);
   background: #fff;
 
+  @media (min-width: u.$desktop-up) {
+    width: 14.125rem;
+  }
+
   .logo {
     display: flex;
     align-items: center;

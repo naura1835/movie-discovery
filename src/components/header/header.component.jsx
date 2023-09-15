@@ -7,6 +7,7 @@ import movieBoxLogo from "../../assets/Logo.svg";
 import playIcon from "../../assets/Play.svg";
 
 import "./header.styles.scss";
+import Loader from "../loader/loader.component";
 
 const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +41,7 @@ const Header = (props) => {
         (res) => res.name.toLowerCase() == "main trailer"
       );
 
-      return setYoutubeKey(trailer.key);
+      return trailer && setYoutubeKey(trailer.key);
     };
 
     fetchVideo();
@@ -50,7 +51,7 @@ const Header = (props) => {
     <header className="hero-section">
       <img
         className="hero-section__img"
-        src={`https://image.tmdb.org/t/p/w500${backdrop_path}`}
+        src={`https://image.tmdb.org/t/p/w1280${backdrop_path}`}
         alt={title}
       />
       <nav>
@@ -67,15 +68,16 @@ const Header = (props) => {
                 name="movie-search"
                 placeholder="what do you want to watch?"
                 onChange={handleSearch}
+                // onKeyDown={handleSearch}
               />
             </div>
 
             {loading ? (
-              <section className="search-bar__result">
-                <p>eee</p>
+              <section className="search-bar__result center">
+                <Loader />
               </section>
             ) : (
-              searchedMovies.length !== 0 && (
+              searchedMovies.length > 0 && (
                 <section className="search-bar__result">
                   <MovieList arr={searchedMovies} />
                 </section>

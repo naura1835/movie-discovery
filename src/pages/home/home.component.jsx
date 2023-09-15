@@ -51,9 +51,11 @@ const HomePage = () => {
 
   const handleSearch = async (e) => {
     const { value } = e.target;
+    let searchArrResult = "";
 
     setIsLoading(true);
 
+    // if (e.key == "Enter") {
     const url = `https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=en-US&page=1`;
     const options = {
       method: "GET",
@@ -64,9 +66,11 @@ const HomePage = () => {
     };
     const res = await fetch(url, options);
     const data = await res.json();
-    const searchArrResult = data.results;
 
     setIsLoading(false);
+    searchArrResult = data.results;
+
+    // }
 
     return setSearchedMovies(searchArrResult);
   };

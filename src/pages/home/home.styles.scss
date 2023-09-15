@@ -39,6 +39,7 @@
 
     @media (min-width: u.$tablet-portrait-up) {
       column-gap: 4rem;
+      justify-items: center;
     }
   }
 }

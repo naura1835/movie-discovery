@@ -1,19 +1,29 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
+import SideBar from "../../components/sidebar/sidebar.component";
+
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-loading-skeleton/dist/skeleton.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import list from "../../assets/List.svg";
 import star from "../../assets/Star.svg";
 import tickets from "../../assets/TwoTickets.svg";
 
 import "./details.styles.scss";
-import SideBar from "../../components/sidebar/sidebar.component";
 
 const DetailsPage = () => {
   const [details, setDetails] = useState({});
+  const [loading, setLoading] = useState(false);
   const { movieId } = useParams();
 
   useEffect(() => {
     const fetchDetails = async () => {
+      setLoading(true);
+
       const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
       const options = {
         method: "GET",
@@ -23,17 +33,36 @@ const DetailsPage = () => {
         },
       };
 
-      const res = await fetch(url, options);
-      const data = await res.json();
-      return setDetails((prev) => ({ ...prev, ...data }));
-      // .then((json) => setDetails(json))
-      // .catch((err) => console.error("error:" + err));
+      fetch(url, options)
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw new Error(res.status);
+        })
+        .then((data) => {
+          setLoading(false);
+          // if (data.status_code) throw new Error(data.status_message);
+          setDetails(data);
+        })
+        .catch((err) => {
+          console.log(err);
+
+          if (err instanceof TypeError) {
+            notify("Failed to fetch");
+          }
+          if (err instanceof SyntaxError) {
+            notify("There was a syntax error");
+          }
+          if (err.message == 404) {
+            notify("Movie not found shut up");
+          }
+        });
     };
 
     fetchDetails();
   }, [movieId]);
 
-  console.log(details);
+  const notify = (message) => toast.error(message);
+
   // `http://api.themoviedb.org/3/movie/${
   //           details.id
   //         }/videos?api_key=${import.meta.env.VITE_API_KEY}`
@@ -41,11 +70,22 @@ const DetailsPage = () => {
   return (
     <section className="details">
       <SideBar />
+      {/* <p>{errorMessage}</p> */}
+      <ToastContainer />
       <article className="details__movie-info">
+        {loading && (
+          <Skeleton
+            rectangle
+            height="100%"
+            width="100%"
+            containerClassName="skeleton__img"
+          />
+        )}
         <img
-          src={`https://image.tmdb.org/t/p/w500${details.poster_path}`}
+          src={`https://image.tmdb.org/t/p/w1280${details.backdrop_path}`}
           alt={details.title}
           className="details__movie-info__img"
+          style={{ display: loading ? "none" : undefined }}
         />
         <div className="details__movie-info__wrapper">
           <ul className="details__movie-info__header">
@@ -53,49 +93,86 @@ const DetailsPage = () => {
               data-testid="movie-title"
               className="details__movie-info__header__item"
             >
-              {details.title}
+              {loading ? <Skeleton width="100px" /> : details.title}
             </li>
             <li
               data-testid="movie-release-date"
               className="details__movie-info__header__item"
             >
-              {details.release_date}
+              {loading ? <Skeleton width="100px" /> : details.release_date}
             </li>
             <li className="details__movie-info__header__item">
-              <span data-testid="movie-runtime">{details.runtime}</span>m
+              {loading ? (
+                <Skeleton width="100px" />
+              ) : (
+                <span data-testid="movie-runtime">{details.runtime}</span>
+              )}
+              {loading == false && "m"}
             </li>
-            <li>
-              {details?.genres?.map((item) => (
-                <div key={item.id} className="genre-chip">
-                  {item.name}
-                </div>
-              ))}
+            <li style={{ display: "flex", flexWrap: "wrap" }}>
+              <SkeletonTheme
+                baseColor="#e65757"
+                highlightColor="#f8e7eb"
+                borderRadius="0.5rem"
+                duration={4}
+              >
+                {details?.genres?.map((item) => (
+                  <Fragment key={item.id}>
+                    {loading ? (
+                      <Skeleton width="100px" />
+                    ) : (
+                      <div className="genre-chip">{item.name}</div>
+                    )}
+                  </Fragment>
+                ))}
+              </SkeletonTheme>
             </li>
           </ul>
           <p
             data-testid="movie-overtime"
             className="details__movie-info__overview"
+            style={{ lineHeight: loading ? 1.5 : "auto" }}
           >
-            {details.overview}
+            {loading ? <Skeleton count={3} /> : details.overview}
           </p>
         </div>
         <div className="details__movie-info__others">
-          <div className="details__movie-info__others__rating">
-            User Rating
-            <img src={star} alt="star" />
-            <span className="vote--average">
-              {details.vote_average?.toFixed(1)}
-            </span>
-            <span className="vote--count"> | {details.vote_count}k</span>
-          </div>
-          <button className="showtime">
-            <img src={tickets} alt="tickets" />
-            See show times
-          </button>
-          <button className="watch-options">
-            <img src={list} alt="list" />
-            More watch options
-          </button>
+          {loading ? (
+            <Skeleton width="200px" />
+          ) : (
+            <div className="details__movie-info__others__rating">
+              User Rating
+              <img src={star} alt="star" />
+              <span className="vote--average">
+                {details.vote_average?.toFixed(1)}
+              </span>
+              <span className="vote--count"> | {details.vote_count}k</span>
+            </div>
+          )}
+          {loading ? (
+            <Skeleton
+              width="300px"
+              height="3.4375rem"
+              containerClassName="btn"
+            />
+          ) : (
+            <button className="showtime">
+              <img src={tickets} alt="tickets" />
+              See show times
+            </button>
+          )}
+          {loading ? (
+            <Skeleton
+              width="300px"
+              height="3.4375rem"
+              containerClassName="btn"
+            />
+          ) : (
+            <button className="watch-options">
+              <img src={list} alt="list" />
+              More watch options
+            </button>
+          )}
         </div>
       </article>
     </section>
