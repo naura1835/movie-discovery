@@ -4,7 +4,7 @@ import home from "../../assets/Home.svg";
 import logo from "../../assets/Logo.svg";
 import logout from "../../assets/Logout.svg";
 import movieProjector from "../../assets/MovieProjector.svg";
-import tVShow from "../../assets/TvShow.svg";
+import tVShow from "../../assets/TVShow.svg";
 
 import "./sidebar.styles.scss";
 
