@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 
 import Header from "../../components/header/header.component";
 import MovieCard from "../../components/movieCard/movieCard.components";
+import Footer from "../../components/footer/footer.component";
 
 import CheveronArrow from "../../assets/Right.svg";
+
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 import "./home.styles.scss";
 
@@ -27,55 +32,82 @@ const HomePage = () => {
 
   useEffect(() => {
     async function fetchMovies() {
-      const url =
-        "https://api.themoviedb.org/3/trending/movie/day?language=en-US";
-      const options = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: import.meta.env.VITE_TOKEN,
-        },
-      };
+      try {
+        const url =
+          "https://api.themoviedb.org/3/trending/movie/day?language=en-US";
+        const options = {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            Authorization: import.meta.env.VITE_TOKEN,
+          },
+        };
 
-      const res = await fetch(url, options);
-      const data = await res.json();
-      const movieArr = await data.results;
+        const res = await fetch(url, options);
+        const data = await res.json();
+        const movieArr = await data.results;
 
-      return setMovies(movieArr);
+        setMovies(movieArr);
+      } catch (err) {
+        if (err instanceof TypeError) {
+          notify("Failed to fetch");
+        }
+        if (err instanceof SyntaxError) {
+          notify("There was a syntax error");
+        }
+      }
     }
 
     fetchMovies();
   }, []);
 
-  console.log(movies);
-
+  //return search result
   const handleSearch = async (e) => {
     const { value } = e.target;
     let searchArrResult = "";
 
-    setIsLoading(true);
+    if (!value) setSearchedMovies([]);
 
-    // if (e.key == "Enter") {
-    const url = `https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=en-US&page=1`;
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: import.meta.env.VITE_TOKEN,
-      },
-    };
-    const res = await fetch(url, options);
-    const data = await res.json();
+    // eslint-disable-next-line no-extra-boolean-cast
+    if (!!value) {
+      setIsLoading(true);
 
-    setIsLoading(false);
-    searchArrResult = data.results;
+      try {
+        const url = `https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=en-US&page=1`;
+        const options = {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            Authorization: import.meta.env.VITE_TOKEN,
+          },
+        };
 
-    // }
+        const res = await fetch(url, options);
+        const data = await res.json();
 
-    return setSearchedMovies(searchArrResult);
+        if (data.results.length == 0) throw new Error("no movie found");
+        console.log(data);
+
+        setIsLoading(false);
+        searchArrResult = data.results;
+
+        setSearchedMovies(searchArrResult);
+      } catch (err) {
+        if (err instanceof TypeError) {
+          notify("Failed to fetch");
+        }
+        if (err instanceof SyntaxError) {
+          notify("There was a syntax error");
+        }
+        if (err.message == "no movie found") {
+          notify("Movie not found, try searching with a different keyword");
+        }
+
+        setIsLoading(false);
+      }
+    }
   };
 
-  //   console.log(searchedMovies);
   const addToFavourites = (movie) => {
     const doesMovieExists = favoriteMovies.find((item) => item.id == movie.id);
 
@@ -83,6 +115,8 @@ const HomePage = () => {
 
     return setFavouriteMovies((prev) => [...prev, movie]);
   };
+
+  const notify = (message) => toast.error(message);
 
   return (
     <>
@@ -93,6 +127,7 @@ const HomePage = () => {
         loading={isLoading}
         favoriteMovies={favoriteMovies}
       />
+      <ToastContainer />
 
       <section aria-labelledby="featured movies" className="featured-movies">
         <div>
@@ -113,6 +148,7 @@ const HomePage = () => {
             ))}
         </div>
       </section>
+      <Footer />
     </>
   );
 };

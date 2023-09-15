@@ -40,12 +40,9 @@ const DetailsPage = () => {
         })
         .then((data) => {
           setLoading(false);
-          // if (data.status_code) throw new Error(data.status_message);
           setDetails(data);
         })
         .catch((err) => {
-          console.log(err);
-
           if (err instanceof TypeError) {
             notify("Failed to fetch");
           }
@@ -53,7 +50,7 @@ const DetailsPage = () => {
             notify("There was a syntax error");
           }
           if (err.message == 404) {
-            notify("Movie not found shut up");
+            notify("Movie not found");
           }
         });
     };
