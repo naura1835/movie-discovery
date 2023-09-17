@@ -18,13 +18,13 @@ import "./details.styles.scss";
 const DetailsPage = () => {
   const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(false);
-  const { movieId } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchDetails = async () => {
       setLoading(true);
 
-      const url = `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`;
+      const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;
       const options = {
         method: "GET",
         headers: {
@@ -56,7 +56,7 @@ const DetailsPage = () => {
     };
 
     fetchDetails();
-  }, [movieId]);
+  }, [id]);
 
   const notify = (message) => toast.error(message);
 
