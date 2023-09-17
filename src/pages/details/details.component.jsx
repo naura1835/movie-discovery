@@ -60,14 +60,9 @@ const DetailsPage = () => {
 
   const notify = (message) => toast.error(message);
 
-  // `http://api.themoviedb.org/3/movie/${
-  //           details.id
-  //         }/videos?api_key=${import.meta.env.VITE_API_KEY}`
-
   return (
     <section className="details">
       <SideBar />
-      {/* <p>{errorMessage}</p> */}
       <ToastContainer />
       <article className="details__movie-info">
         {loading && (
