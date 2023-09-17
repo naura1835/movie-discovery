@@ -10,7 +10,7 @@ const MovieCard = ({ movie, addToFavourites }) => {
 
   return (
     <article data-testid="movie-card" className="movie-card">
-      <Link to={`details/${id}`}>
+      <Link to={`movies/${id}`}>
         <img
           data-testid="movie-poster"
           src={`https://image.tmdb.org/t/p/w500${poster_path}`}
